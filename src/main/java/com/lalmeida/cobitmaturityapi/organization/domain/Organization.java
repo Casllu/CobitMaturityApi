@@ -1,19 +1,24 @@
 package com.lalmeida.cobitmaturityapi.organization.domain;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.Type;
 import org.hibernate.type.SqlTypes;
 
 import java.time.OffsetDateTime;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "organization", schema = "agent_core")
+@Table(name = "organizations", schema = "agent_core")
 public class Organization {
 
     @Id
@@ -30,9 +35,9 @@ public class Organization {
 
     private String size;
 
-    @JdbcTypeCode(SqlTypes.JSON)
+    @Type(JsonBinaryType.class)
     @Column(columnDefinition = "jsonb")
-    private Map<String, Object> settigs;
+    private Map<String, Object> settings = new HashMap<>();
 
     @Column(name = "created_at", updatable = false)
     private OffsetDateTime createdAt;

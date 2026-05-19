@@ -8,6 +8,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.time.OffsetDateTime;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -35,7 +36,7 @@ public class Session {
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
-    private Map<String, Object> context;
+    private Map<String, Object> context = new HashMap<>();
 
     @Column(nullable = false)
     private String status;
@@ -48,12 +49,14 @@ public class Session {
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
-    private Map<String, Object> metadata;
+    private Map<String, Object> metadata = new HashMap<>();
 
     @PrePersist
     public void prePersist() {
         startedAt = OffsetDateTime.now();
         status = "active";
         sessionType = sessionType != null ? sessionType : "cobit_evaluation";
+        if (context == null) context = new HashMap<>();
+        if (metadata == null) metadata = new HashMap<>();
     }
 }

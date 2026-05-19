@@ -1,5 +1,6 @@
 package com.lalmeida.cobitmaturityapi.organization.service;
 
+import com.lalmeida.cobitmaturityapi.cobit.controller.dto.OrganizationCreateDTO;
 import com.lalmeida.cobitmaturityapi.organization.domain.Organization;
 import com.lalmeida.cobitmaturityapi.organization.repository.OrganizationRepository;
 import com.lalmeida.cobitmaturityapi.session.domain.Session;
@@ -23,18 +24,18 @@ public class OrganizationService {
     }
 
     @Transactional
-    public OrganizationSessionResult createdAndStartEvaluation (String name, String sector, String size) {
+    public OrganizationSessionResult createdAndStartEvaluation (OrganizationCreateDTO dto) {
 
         Organization org = new Organization();
-        org.setName(name);
-        org.setSlug(generateSlug(name));
-        org.setSector(sector);
-        org.setSize(size);
+        org.setName(dto.getName());
+        org.setSlug(generateSlug(dto.getName()));
+        org.setSector(dto.getSector());
+        org.setSize(dto.getSize());
         org = organizationRepository.save(org);
 
         Session session = new Session();
         session.setOrganization(org);
-        session.setTitle("Avaliação COBIT 2019 — " + name);
+        session.setTitle("Avaliação COBIT 2019 — " + dto.getName());
         session.setSessionType("cobit_evaluation");
         session = sessionRepository.save(session);
 
